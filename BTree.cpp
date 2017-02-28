@@ -128,11 +128,8 @@ void postO2(node* root)
 		else
 		{
 			p = s.top();
-			if (p->lChild && p->rChild != r)
-			{
+			if (p->rChild && p->rChild != r)
 				p = p->rChild;
-				s.push(p);
-				p = p->lChild;
 			}
 			else
 			{
