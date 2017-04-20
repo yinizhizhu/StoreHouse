@@ -32,6 +32,18 @@ public:
 	}
 };
 
+struct query {
+	STEP_TYPE	type;	//find, add, del
+	keyType		key;
+	node*		ans;	//store the result of searching
+	query(STEP_TYPE t, keyType k) : type(t), key(k), ans(NULL) {}
+	void setA(node* a) { ans = a; }
+};
+friend ofstream& operator<<(ofstream& os, const query& a) {
+	os << a.type << " " << a.key << " " << a.ans << "\n";
+	return os;
+}
+
 node direction[4] = {
 	node(0, -1),	//up
 	node(0, 1),		//down
