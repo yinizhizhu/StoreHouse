@@ -31,12 +31,16 @@ def smooth(a):
     return res
 
 for line in f.readlines():
-    if len(line) > 0:
+    if len(line) > 3:
 #        print line
         model = '\d\d\d\.\d?\d.\d\d?'
-        for i in re.findall(model, line):
-#            print i
-            container.append((smooth(i), line))
+        result = re.findall(model, line)
+        if len(result) == 0:
+            container.append(('017.12.12', line))
+        else:
+            for i in result:
+    #            print i
+                container.append((smooth(i), line))
 ans = sorted(container, key=lambda pair: pair[0], reverse=False)
 
 counter = 1
