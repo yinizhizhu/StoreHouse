@@ -97,3 +97,41 @@ Output Sample 1
 No
 Input Sample 2
 Yes
+
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+bool cmp(const int a, const int b) {
+	return a > b;
+}
+
+void show(vector<int>& container) {
+	for (int i = 0; i < container.size(); i++)
+		cout << container[i] << " ";
+	cout << endl;
+}
+
+int main() {
+	int n, i, ans, step;
+	vector<int> container;
+	cin >> n;
+	container.resize(n);
+	for (i = 0; i < n; i++)
+		cin >> container[i];
+	sort(container.begin(), container.end(), cmp);
+	step = ans = container[0];
+	for (i = 1; i < n; i++) {
+		step -= container[i];
+		if (ans < container[i])
+			break;
+	}
+	if (i == n && step <= 0)
+		cout << "Yes" << endl;
+	else
+		cout << "No" << endl;
+	return 0;
+}
