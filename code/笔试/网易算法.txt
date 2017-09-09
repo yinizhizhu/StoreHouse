@@ -1,0 +1,84 @@
+5
+1 5 6 2 1
+
+1
+5
+
+2
+5 6
+
+3
+1 6 5
+
+
+3
+
+1 2 1
+5 6
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#define INT_MAX 2147483647 
+
+using namespace std;
+
+int h(int a, int b) {
+	int ans = b - a;
+	return (ans > 0 ? ans : -ans);
+}
+
+int calc(vector<int>& container, int mid, int n) {
+	int ansQ = 0, ansB = 0;
+	int qt = 0, bt = 0;
+	for (n--; n >= 0; n--) {
+		if (container[n] >= mid) {
+			if (bt) {
+				ansB += h(container[n], bt);
+				bt = container[n];
+			}
+			else {
+				bt = container[n];
+			}
+		}
+		else {
+			if (qt) {
+				ansQ += h(container[n], qt);
+				qt = container[n];
+			}
+			else {
+				qt = container[n];
+			}
+		}
+	}
+	//cout << ansQ << " " << ansB << endl;
+	return ansB + ansQ;
+}
+
+int main() {
+	int n, i, mid;
+	vector<int> container, move;
+	cin >> n;
+	move.resize(n);
+	container.resize(n);
+	for (i = 0; i < n; i++) {
+		cin >> container[i];
+		move[i] = container[i];
+	}
+	sort(container.begin(), container.end());
+	int ans = INT_MAX, tmp;
+	for (i = 0, mid = container[0]; i < n;) {
+		tmp = calc(move, mid, n);
+		//cout << i << ": " << tmp << endl;
+		if (ans > tmp) {
+			ans = tmp;
+		}
+		while (i < n && container[i] == mid) {
+			i++;
+		}
+		if (i<n)
+			mid = container[i];
+	}
+	cout << ans << endl;
+	return 0;
+}
