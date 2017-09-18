@@ -1,0 +1,120 @@
+#include <iostream>
+#include <string>
+#define INT_MAX 2147483647
+
+using namespace std;
+
+void help(string& str, string& pat) {
+	int head = -1, tail = -1;
+	int i, j, k, ans = INT_MAX;
+	int lens, lenp = pat.size();
+	if (lenp == 0) {
+		cout << "-1 -1" << endl;
+		return;
+	}
+	lens = str.size() - lenp;
+	for (i = 0; i <= lens; i++) {
+		if (str[i] == pat[0]) {
+			for (k = i + 1, j = 1; j < lenp; k++) {
+				if (str[k] == pat[j])
+					j++;
+			}
+			if (j == lenp && ans > k - i) {
+				ans = k - i;
+				head = i;
+				tail = k - 1;
+			}
+		}
+	}
+	cout << head << " " << tail << endl;
+}
+
+int main() {
+	string str, pat;
+	while (cin >> str >> pat) {
+		if (str.size() < pat.size())
+			cout << "-1 -1" << endl;
+		else
+			help(str, pat);
+	}
+	return 0;
+}
+abaacxbcbbbbbacc cbc
+abc x
+aaabcac ac
+
+
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main() {
+	int i, n;
+	vector<int> con;
+	while (cin >> n) {
+		con.resize(n + 1);
+		con[0] = 1;
+		if (n)
+			con[1] = 1;
+		for (i = 2; i <= n; i++)
+			con[i] = con[i - 1] + con[i - 2];
+		cout << con[n] << endl;
+	}
+	return 0;
+}
+
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <vector>
+
+using namespace std;
+
+void help(int n, vector<string>&ans) {
+	vector<long> con(10000);
+	int i, j, carry, tmp = 0;
+	con[0] = 1;
+	for (i = 1; i <= n; i++) {
+		carry = 0;
+		for (j = 0; j <= tmp; j++) {
+			con[j] = con[j] * i + carry;
+			carry = con[j] / 10000;
+			con[j] = con[j] % 10000;
+		}
+		if (carry > 0) {
+			tmp++;
+			con[tmp] = carry;
+		}
+	}
+	char tmps[1000];
+	vector<string> res;
+	sprintf(tmps, "\n%ld", con[tmp]);
+	res.push_back(tmps);
+	res[0] = to_string(con[tmp]);
+	for (i = tmp - 1; i >= 0; i--) {
+		sprintf(tmps, "%4.4ld", con[i]);
+		res.push_back(tmps);
+	}
+	ans.resize(tmp + 1);
+	for (int i = 0; i < tmp + 1; i++)
+		ans[i] = res[i];
+}
+
+
+int main() {
+	int n, i;
+	while (cin >> n) {
+		if (n == 0)
+			cout << 1;
+		else {
+			vector<string> ans;
+			help(n, ans);
+			for (i = 0; i < ans.size(); i++)
+				cout << ans[i];
+		}
+		cout << endl;
+	}
+	return 0;
+}
