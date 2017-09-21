@@ -1,0 +1,97 @@
+10 14
+1 2 5
+1 3 5
+1 5 5
+2 4 5
+2 5 5
+3 4 5
+4 6 5
+5 6 5
+6 7 4
+7 8 5
+7 9 5
+7 10 5
+8 9 5
+8 10 5
+
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <cstdio>
+
+#define N 101
+#define MAX_LEE 2147483647
+#define MIN_LEE -2147483648
+
+using namespace std;
+
+typedef pair<int, int> edge;
+vector<edge> ans;
+
+int container[N][N];
+bool visit[N];
+int cost = MAX_LEE;
+
+void getCost(int n) {
+	int tmp = 0, i, j;
+	int lena, lenb;
+	vector<int> a, b;
+	a.push_back(1);
+	for (i = 2; i <= n; i++) {
+		if (visit[i])
+			b.push_back(i);
+		else
+			a.push_back(i);
+	}
+	lena = a.size(), lenb = b.size();
+	for (i = 0; i < lena; i++)
+		for (j = 0; j < lenb; j++)
+			tmp += container[a[i]][b[j]];
+	if (tmp && tmp < cost) {
+		cost = tmp;
+		ans.clear();
+		int x, y;
+		for (i = 0; i < lena; i++)
+			for (j = 0; j < lenb; j++) {
+				x = a[i], y = b[j];
+				if (container[x][y]) {
+					if (x < y)
+						ans.push_back(edge(x, y));
+					else
+						ans.push_back(edge(y, x));
+				}
+			}
+	}
+}
+
+void dfs(int n) {
+	getCost(n);
+	for (int i = 2; i <= n; i++) {
+		if (visit[i]) {
+			visit[i] = false;
+			dfs(n);
+			visit[i] = true;
+		}
+	}
+}
+
+int main() {
+	int n, m, i, j, v;
+	cin >> n >> m;
+	for (i = 1; i <= n; i++) {
+		visit[i] = true;
+		for (j = i; j <= n; j++)
+			container[i][j] = container[j][i] = 0;
+	}
+	for (; m; m--) {
+		scanf("%d %d %d", &i, &j, &v);
+		container[i][j] = container[j][i] = v;
+	}
+	visit[1] = false;
+	dfs(n);
+	sort(ans.begin(), ans.end());
+	v = ans.size();
+	for (i = 0; i < v; i++)
+		cout << ans[i].first << " " << ans[i].second << endl;
+	return 0;
+}
