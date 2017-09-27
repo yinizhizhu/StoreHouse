@@ -1,0 +1,95 @@
+2
+11.2
+2.34567890123456778839283737263
+2
+0.1
+0.9
+1
+0.1
+-1
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+struct f {
+	vector<int> numU, numL;
+	f(string& str) {
+		int i, j, len = str.size();
+		for (i = 0; i < len; i++) {
+			if (str[i] == '.')
+				break;
+		}
+		for (j = i - 1; j >= 0; j--)
+			numU.push_back(str[j] - '0');
+		i++;
+		for (; i < len; i++)
+			numL.push_back(str[i] - '0');
+	}
+	void add(f& b) {
+		int carry = 0;
+		int i, tmp, len = numL.size(), lenb = b.numL.size();
+		for (i = len; i < lenb; i++)
+			numL.push_back(b.numL[i]);
+		if (len > lenb)
+			len = lenb;
+		for (i = len - 1; i >= 0; i--) {
+			carry += b.numL[i] + numL[i];
+			numL[i] = carry %10;
+			carry /= 10;
+		}
+		for (i = numL.size() - 1; i>=0 && numL[i] == 0;i--)
+			numL.erase(numL.end() - 1);
+		len = numU.size(), lenb = b.numU.size();
+		tmp = (len < lenb ? len : lenb);
+		for (i = 0; i < tmp; i++) {
+			carry += b.numU[i] + numU[i];
+			numU[i] = carry % 10;
+			carry /= 10;
+		}
+		for (; i < len; i++) {
+			carry += numU[i];
+			numU[i] = carry % 10;
+			carry /= 10;
+		}
+		for (; i < lenb; i++) {
+			carry += b.numU[i];
+			numU.push_back(carry % 10);
+			carry /= 10;
+		}
+		if (carry)
+			numU.push_back(carry);
+	}
+	void show() {
+		int i;
+		if (numU.size() == 0)
+			cout << "0";
+		else {
+			for (i = numU.size() - 1; i >= 0; i--)
+				cout << numU[i];
+		}
+		if (numL.size())
+			cout << ".";
+		for (i = 0; i < numL.size(); i++)
+			cout << numL[i];
+		cout << endl;
+	}
+};
+
+int main() {
+	int n;
+	string str;
+	for (; cin >> n && n != -1; ) {
+		cin >> str;
+		f ans(str);
+		for (--n; n; n--) {
+			cin >> str;
+			f tmp(str);
+			ans.add(tmp);
+		}
+		ans.show();
+	}
+	return 0;
+}
