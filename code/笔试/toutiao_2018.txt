@@ -1,0 +1,196 @@
+Third
+4
+3 1
+2 2
+1 4
+1 4
+
+10
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class Card {
+public:
+	Card();
+	Card(int a, int b);
+	int x, y;
+	void set(int a, int b);
+	void operator+=(const Card& p);
+	void show();
+};
+
+Card::Card() {
+	x = y = 0;
+}
+
+Card::Card(int a, int b) {
+	set(a, b);
+}
+
+void Card::set(int a, int b) {
+	x = a;
+	y = b;
+}
+
+void Card::operator+=(const Card& p) {
+	x += p.x;
+	y += p.y;
+}
+
+void Card::show() {
+	cout << x << ", " << y << endl;
+}
+
+bool cmp(Card& a, Card& b) {
+	return a.x < b.x;
+}
+
+int main() {
+	int i, j, n, x, y;
+	vector<Card> container;
+	cin >> n;
+	for (i = 0; i < n; i++) {
+		cin >> x >> y;
+		container.push_back(Card(x, y));
+		container[i].show();
+	}
+	sort(container.begin(), container.end(), cmp);
+
+	cout << "After sorting..." << endl;
+	for (i = 0; i < n; i++) {
+		container[i].show();
+	}
+	return 0;
+}
+
+Fourth
+3 3 2 1 3 3 3
+
+6 
+5 9 7 6 5 17 
+6 8 10 11 17 16
+
+3 
+9 13 17 
+10 14 18
+
+3
+
+#include <iostream>
+#include <vector>
+#include <math.h>
+#include <algorithm>
+
+using namespace std;
+
+int n;
+
+int help(int a) {
+	return int(pow(2, a) - 1);
+}
+
+void calculate(vector<int> &a, vector<int> &b) {
+	vector<bool> judge;
+	int i;
+	for (i = 0; i < n; i++) {
+		judge.push_back(a[i] < b[i]);
+		cout << judge[i] << endl;
+	}
+
+	vector<int> ans;
+	int counter = 0;
+	for (i = 0;;) {
+		while (i < n && !judge[i])
+			i++;
+		if (i < n) {
+			while (i < n && judge[i]) {
+				counter += 1;
+				i++;
+			}
+			if (counter) {
+				ans.push_back(counter);
+				counter = 0;
+			}
+		}
+		else
+			break;
+	}
+	counter = 0;
+	for (i = 0; i < ans.size(); i++)
+		counter += help(ans[i]);
+	cout << counter << endl;
+	return;
+}
+
+int main() {
+	int i, x;
+	vector<int> a, b;
+	cin >> n;
+	for (i = 0; i < n; i++) {
+		cin >> x;
+		a.push_back(x);
+	}
+	for (i = 0; i < n; i++) {
+		cin >> x;
+		b.push_back(x);
+	}
+	calculate(a, b);
+	return 0;
+}
+
+Fifth
+3 10 0 3 3 7 7 0
+4 10 0 3 3 7 7 9 9 2
+
+3
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+struct during{
+	int x, y;
+	during() : x(0), y(0) {}
+	during(int a, int b) : x(a), y(b) {}
+	void show() {
+		cout << x << ", " << y << endl;
+	}
+};
+
+bool cmp(during& a, during& b) {
+	return a.y < b.y;
+}
+
+int main() {
+	int i, j, m, n, x, y;
+	vector<during> container;
+	cin >> n >> m;
+	for (i = 0; i < n; i++) {
+		cin >> x >> y;
+		if (y == 0)
+			y = m;
+		else {
+			if (x > y)
+				continue;
+		}
+		container.push_back(during(x, y));
+	}
+	sort(container.begin(), container.end(), cmp);
+
+	int counter = 1;
+	int tail = container[0].y;
+	n = container.size();
+	for (i = 1; i < n; i++) {
+		if (container[i].x >= tail) {
+			tail = container[i].y;
+			counter += 1;
+		}
+	}
+	cout << counter << endl;
+	return 0;
+}
