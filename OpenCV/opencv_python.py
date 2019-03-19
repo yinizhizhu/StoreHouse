@@ -123,3 +123,9 @@ matches = bf.match(des1,des2)
 
 # 4756
 # 3918
+
+
+
+crop = im[y:(y+h), x:(x+w)]
+cv2.rectangle(im, (x, y), (x+w, y+h))
+cv2.imwrite(outName, crop)
